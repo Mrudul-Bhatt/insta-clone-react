@@ -1,219 +1,68 @@
-import React, { useState, useEffect, useContext, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { LinearProgress } from '@material-ui/core';
-import { userContext } from '../../App';
-
-import {
-	Button,
-	IconButton,
-	Dialog,
-	DialogActions,
-	DialogTitle,
-} from '@material-ui/core';
-import {
-	Favorite as FavoriteIcon,
-	Chat as ChatIcon,
-	Delete as DeleteIcon,
-	SettingsInputComponentSharp,
-} from '@material-ui/icons';
+import * as actions from '../../store/actions/user';
+import ConfirmDeletePost from '../Screens/ConfirmDeletePost';
+import { Button } from '@material-ui/core';
+import { Favorite as FavoriteIcon, Chat as ChatIcon } from '@material-ui/icons';
+import { useSelector, useDispatch } from 'react-redux';
 
 const Home = () => {
-	const [open, setOpen] = useState(false);
-	const [data, setData] = useState([]);
-	const [loader, setLoader] = useState(false);
-	// const [postId, setPostId] = useState(false);
 	const [comment, setComment] = useState('');
 
-	const { state, dispatch } = useContext(userContext);
+	const dispatch = useDispatch();
+	const fetchAll = () => dispatch(actions.fetchAll());
+	const like = (id, data) => dispatch(actions.like(id, data));
+	const unlike = (id, data) => dispatch(actions.unlike(id, data));
+	const postComment = (id, data, comment) =>
+		dispatch(actions.comment(id, data, comment));
+
+	const setId = (id) => dispatch(actions.setId(id));
+	const clickChange = () => dispatch(actions.clickedChange());
+	const data = useSelector((state) => state.data);
+	const click = useSelector((state) => state.clicked);
+	const loading = useSelector((state) => state.loading);
+
+	const user = JSON.parse(localStorage.getItem('user'));
 
 	useEffect(() => {
-		setLoader(true);
-		fetch('/allpost', {
-			headers: {
-				Authorization: 'Bearer ' + localStorage.getItem('jwt'),
-			},
-		})
-			.then((res) => res.json())
-			.then((result) => {
-				setData(result.posts);
-				console.log(result);
-				setLoader(false);
-			})
-			.catch((error) => {
-				console.log(error);
-				setLoader(false);
-			});
-	}, [data, setData]);
-
-	const likePost = (id) => {
-		fetch('/like', {
-			method: 'put',
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: 'Bearer ' + localStorage.getItem('jwt'),
-			},
-			body: JSON.stringify({
-				postId: id,
-			}),
-		})
-			.then((res) => res.json())
-			.then((result) => {
-				//console.log(result);
-				const newData = data.map((item) => {
-					if (item._id === result._id) {
-						return result;
-					} else {
-						return item;
-					}
-				});
-				setData(newData);
-			})
-			.catch((error) => console.log(error));
-	};
-
-	const unlikePost = useCallback(
-		(id) => {
-			fetch('/unlike', {
-				method: 'put',
-				headers: {
-					'Content-Type': 'application/json',
-					Authorization: 'Bearer ' + localStorage.getItem('jwt'),
-				},
-				body: JSON.stringify({
-					postId: id,
-				}),
-			})
-				.then((res) => res.json())
-				.then((result) => {
-					//console.log(result);
-					const newData = data.map((item) => {
-						if (item._id === result._id) {
-							return result;
-						} else {
-							return item;
-						}
-					});
-					setData(newData);
-				})
-				.catch((error) => console.log(error));
-		},
-		[data, setData]
-	);
-
-	const postComment = useCallback(
-		(postId) => {
-			fetch('/comments', {
-				method: 'put',
-				headers: {
-					'Content-type': 'application/json',
-					Authorization: 'Bearer ' + localStorage.getItem('jwt'),
-				},
-				body: JSON.stringify({
-					text: comment,
-					postId,
-				}),
-			})
-				.then((res) => res.json())
-				.then((result) => {
-					console.log(result);
-					const newData = data.map((item) => {
-						if (item._id === result._id) {
-							return result;
-						} else {
-							return item;
-						}
-					});
-					setData(newData);
-					setComment('');
-				})
-				.catch((error) => console.log(error));
-		},
-		[data, setData]
-	);
-
-	const deletePost = useCallback(
-		(postId) => {
-			fetch(`/deletepost/${postId}`, {
-				method: 'delete',
-				headers: {
-					Authorization: 'Bearer ' + localStorage.getItem('jwt'),
-				},
-			})
-				.then((res) => res.json())
-				.then((value) => {
-					console.log(value);
-					const newData = data.filter((item) => {
-						return item._id !== value.result._id;
-					});
-					setData(newData);
-				})
-				.catch((error) => console.log(error));
-		},
-		[setData, data]
-	);
-
-	const ConfirmDeletePost = useCallback(
-		(id) => {
-			return (
-				<Dialog
-					open={open}
-					onClose={setOpen(false)}
-					aria-labelledby='alert-dialog-title'
-					aria-describedby='alert-dialog-description'
-				>
-					<DialogTitle id='alert-dialog-title'>
-						{'Do you want to delete this post?'}
-					</DialogTitle>
-					<DialogActions>
-						<Button onClick={setOpen(false)} color='primary'>
-							Cancel
-						</Button>
-						<Button
-							onClick={() => {
-								deletePost(id);
-								setOpen(false);
-							}}
-							color='primary'
-							autoFocus
-						>
-							Delete
-						</Button>
-					</DialogActions>
-				</Dialog>
-			);
-		},
-		[open, setOpen]
-	);
+		fetchAll();
+		console.log(data);
+	}, [click]);
 
 	return (
 		<div>
-			{loader ? <LinearProgress /> : null}
+			{loading ? <LinearProgress /> : null}
 			<div className='home'>
+				<ConfirmDeletePost />
 				{data.map((item) => {
 					return (
 						<div className='card home-card' key={item._id}>
 							<h5>
 								{item.postedBy.name}
 								<span style={{ float: 'right' }}>
-									{state.user._id === item.postedBy._id && (
-										<IconButton aria-label='delete' onClick={setOpen(true)}>
-											<DeleteIcon fontSize='small' />
-											<ConfirmDeletePost id={item._id} />
-										</IconButton>
-									)}
+									{user._id === item.postedBy._id ? (
+										<i
+											className='material-icons'
+											onClick={() => {
+												setId(item._id);
+											}}
+										>
+											delete
+										</i>
+									) : null}
 								</span>
 							</h5>
 							<div className='card-image'>
 								<img src={item.imageUrl} alt='' />
 							</div>
 							<div className='card-content'>
-								{/* <i className='material-icons' style={{ color: 'red' }}>
-							favorite
-						</i> */}
-								{item.likes.includes(state.user._id) ? (
+								{item.likes.includes(user._id) ? (
 									<i
 										className='material-icons'
 										style={{ color: 'red' }}
-										onClick={() => unlikePost(item._id)}
+										onClick={() => {
+											unlike(item._id, data);
+										}}
 									>
 										thumb_down
 									</i>
@@ -221,7 +70,9 @@ const Home = () => {
 									<i
 										className='material-icons'
 										style={{ color: 'blue' }}
-										onClick={() => likePost(item._id)}
+										onClick={() => {
+											like(item._id, data);
+										}}
 									>
 										thumb_up
 									</i>
@@ -255,7 +106,12 @@ const Home = () => {
 									/*variant='outlined'*/
 
 									color='primary'
-									onClick={() => postComment(item._id)}
+									onClick={() => {
+										postComment(item._id, data, comment);
+										clickChange();
+										setComment('');
+										console.log('add comment');
+									}}
 								>
 									Add
 								</Button>

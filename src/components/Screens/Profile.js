@@ -1,9 +1,9 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { userContext } from '../../App';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 const Profile = () => {
 	const [pics, setPics] = useState([]);
-	const { state, dispatch } = useContext(userContext);
+	const user = useSelector((state) => state.user);
 	//console.log(state.user);
 
 	useEffect(() => {
@@ -38,7 +38,7 @@ const Profile = () => {
 					/>
 				</div>
 				<div>
-					<h4>{state.user ? state.user.name : 'Loading...'}</h4>
+					<h4>{user ? user.name : 'Loading...'}</h4>
 					<div
 						style={{
 							display: 'flex',

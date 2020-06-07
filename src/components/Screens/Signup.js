@@ -4,51 +4,38 @@ import M from 'materialize-css';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { emailRegex } from '../../regex';
 import Button from '@material-ui/core/Button';
+import { useDispatch, useSelector } from 'react-redux';
+import * as actions from '../../store/actions/user';
 
 const Signup = () => {
 	const [name, setName] = useState('');
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
-	const [loader, setLoader] = useState(false);
 	const history = useHistory();
+	const dispatch = useDispatch();
+	const error = useSelector((state) => state.error);
+	const loading = useSelector((state) => state.loading);
+	const signup = (name, email, password) =>
+		dispatch(actions.signup(name, email, password));
 
 	const addPost = (props) => {
-		setLoader(true);
 		if (!emailRegex.test(email)) {
 			M.toast({ html: 'Invalid email', classes: 'red' });
-			setLoader(false);
 			return;
 		}
-		fetch('/signup', {
-			method: 'post',
-			headers: {
-				'Content-type': 'application/json',
-			},
-			body: JSON.stringify({
-				name,
-				email,
-				password,
-			}),
-		})
-			.then((res) => res.json())
-			.then((data) => {
-				if (data.error) {
-					M.toast({ html: data.error, classes: 'red' });
-				} else {
-					M.toast({ html: data.message, classes: 'green' });
-					history.push('/signin');
-				}
-				setLoader(false);
-			})
-			.catch((error) => {
-				console.log(error);
-				setLoader(false);
-			});
+
+		signup(name, email, password);
+		if (error) {
+			M.toast({ html: error, classes: 'red' });
+		} else {
+			M.toast({ html: 'Signup Success', classes: 'green' });
+			history.push('/signin');
+		}
 	};
 
 	return (
 		<div>
-			{loader ? <LinearProgress /> : null}
+			{loading ? <LinearProgress /> : null}
 			<div className='mycard'>
 				<div className='card auth-card input-field'>
 					<div>
