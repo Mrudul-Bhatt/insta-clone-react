@@ -1,41 +1,63 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import M from 'materialize-css';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { emailRegex } from '../../regex';
 import Button from '@material-ui/core/Button';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector, connect } from 'react-redux';
 import * as actions from '../../store/actions/user';
 
-const Signin = () => {
+const Signin = (props) => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const history = useHistory();
-	const loading = useSelector((state) => state.loading);
-	const dispatch = useDispatch();
-	const error = useSelector((state) => state.error);
-	const signin = (email, password) => dispatch(actions.signin(email, password));
+	const [toggle, setToggle] = useState(false);
+	const user = JSON.parse(localStorage.getItem('user'));
 
-	const addPost = (props) => {
-		if (!emailRegex.test(email)) {
-			M.toast({ html: 'Invalid email', classes: 'red' });
+	// const loading = useSelector((state) => state.loading);
+	// const dispatch = useDispatch();
+	// const error = useSelector((state) => state.error);
+	// const message = useSelector((state) => state.message);
+	// //const navChange = () => dispatch(actions.navChange());
+	// const signin = (email, password) => dispatch(actions.signin(email, password));
+	const message = useSelector((state) => state.signinMessage);
+	const error = useSelector((state) => state.signinError);
+	const path = useSelector((state) => state.path);
+	// useEffect(() => {
+	// 	console.log(message);
+	// 	if (error) {
+	// 		M.toast({ html: error, classes: 'red' });
+	// 		actions.signinStart();
+	// 	}
+	// 	// if (props.message) {
+	// 	// 	console.log(props.message);
+	// 	// 	M.toast({ html: props.message, classes: 'green' });
+	// 	// 	history.push('/');
+	// 	// }
+	// 	console.log(props.signinClicked);
+	// }, [props.signinClicked]);
 
-			return;
-		}
+	const addPost = () => {
+		// if (!emailRegex.test(email)) {
+		// 	M.toast({ html: 'Invalid email', classes: 'red' });
+		// 	return;
+		// }
+		console.log('signin');
+		props.signin(email, password);
 
-		signin(email, password);
-
-		if (error) {
-			M.toast({ html: error, classes: 'red' });
-		} else {
-			M.toast({ html: 'Signin Success', classes: 'green' });
-			history.push('/');
-		}
+		// if (props.error) {
+		// 	M.toast({ html: props.error, classes: 'red' });
+		// 	return;
+		// }
+		// if (props.message) {
+		// 	M.toast({ html: props.message, classes: 'green' });
+		// 	history.push('/');
+		// }
 	};
 
 	return (
 		<div>
-			{loading ? <LinearProgress /> : null}
+			{props.loading ? <LinearProgress /> : null}
 			<div className='mycard'>
 				<div className='card auth-card input-field'>
 					<div>
@@ -58,7 +80,10 @@ const Signin = () => {
 						/*variant='outlined'*/
 						size='large'
 						color='primary'
-						onClick={() => addPost()}
+						onClick={() => {
+							addPost();
+							setToggle(!toggle);
+						}}
 					>
 						Signin
 					</Button>
@@ -71,4 +96,21 @@ const Signin = () => {
 	);
 };
 
-export default Signin;
+const mapStateToProps = (state) => {
+	return {
+		loading: state.loading,
+		error: state.error,
+		message: state.message,
+		signinClicked: state.signinClicked,
+	};
+};
+
+const mapDispatchToProps = (dispatch) => {
+	return {
+		signin: (email, password) => dispatch(actions.signin(email, password)),
+	};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Signin);
+
+//export default connect( Signin);

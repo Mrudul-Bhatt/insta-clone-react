@@ -1,79 +1,26 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../store/actions/user';
 const Navbar = () => {
 	const dispatch = useDispatch();
-	const logout = useCallback(() => dispatch(actions.logout()), [dispatch]);
+	const logout = () => dispatch(actions.logout());
 	console.log('executed navbar');
 	//const user = localStorage.getItem('user');
+	const user = useSelector((state) => state.user);
+	//const navChange = useSelector((state) => state.navChange);
+	//const token = useSelector((state) => state.token !== null);
+	//const navChangefn = () => dispatch(actions.navChange());
 
-	const navChange = useSelector((state) => state.navChange);
-
+	// useEffect(() => {
+	// 	console.log(navChange);
+	// }, [navChange]);
 	const history = useHistory();
-
-	const Navnames = () => {
-		return (
-			<div
-				className='nav-wrapper white'
-				style={{
-					display: 'flex',
-					justifyContent: 'space-between',
-				}}
-			>
-				<div>
-					<Link to={navChange ? '/' : '/landing'} className='brand-logo'>
-						Instagram
-					</Link>
-				</div>
-
-				<div>
-					<ul id='nav-mobile' className='right '>
-						{navChange ? (
-							<div>
-								<li>
-									<Link to='/'>Home</Link>
-								</li>
-								<li>
-									<Link to='/create'>Add Post</Link>
-								</li>
-								<li>
-									<Link to='/profile'>Profile</Link>
-								</li>
-								<li>
-									<Button
-										color='primary'
-										onClick={() => {
-											console.log('executed logout');
-											logout();
-											history.push('/landing');
-										}}
-									>
-										Logout
-									</Button>
-								</li>
-							</div>
-						) : (
-							<div>
-								<li>
-									<Link to='/signin'>Signin</Link>
-								</li>
-								<li>
-									<Link to='/signup'>Signup</Link>
-								</li>
-							</div>
-						)}
-					</ul>
-				</div>
-			</div>
-		);
-	};
 
 	return (
 		<nav>
-			{Navnames()}
-			{/* <div
+			<div
 				className='nav-wrapper white'
 				style={{
 					display: 'flex',
@@ -105,6 +52,7 @@ const Navbar = () => {
 										onClick={() => {
 											console.log('executed logout');
 											logout();
+											//navChangefn();
 											history.push('/landing');
 										}}
 									>
@@ -124,7 +72,7 @@ const Navbar = () => {
 						)}
 					</ul>
 				</div>
-			</div> */}
+			</div>
 		</nav>
 	);
 };

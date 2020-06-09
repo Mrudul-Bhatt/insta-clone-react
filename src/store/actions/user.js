@@ -1,20 +1,27 @@
-export const signupSuccess = (error) => {
+import { retry } from 'redux-saga/effects';
+
+export const signupSuccess = (response) => {
 	return {
 		type: 'SIGNUP_SUCCESS',
-		error: error,
+		//message: response.message,
 	};
 };
 
 export const signupFail = (error) => {
 	return {
 		type: 'SIGNUP_FAIL',
-		error: error,
+		//error: error,
 	};
 };
 
 export const signupStart = () => {
 	return {
 		type: 'SIGNUP_START',
+	};
+};
+export const signupClicked = () => {
+	return {
+		type: 'SIGNUP_CLICKED',
 	};
 };
 
@@ -27,19 +34,18 @@ export const signup = (name, email, password) => {
 	};
 };
 
-export const signinSuccess = ({ error, token, user }) => {
+export const signinSuccess = (response) => {
 	return {
 		type: 'SIGNIN_SUCCESS',
-		error: error,
-		token: token,
-		user: user,
+		//message: response.message,
+		token: response.token,
+		user: response.user,
 	};
 };
 
-export const signinFail = (error) => {
+export const signinFail = () => {
 	return {
 		type: 'SIGNIN_FAIL',
-		error: error,
 	};
 };
 
@@ -54,6 +60,12 @@ export const signin = (email, password) => {
 		type: 'SIGNIN',
 		email: email,
 		password: password,
+	};
+};
+
+export const signinClicked = () => {
+	return {
+		type: 'SIGNIN_CLICKED',
 	};
 };
 
@@ -72,6 +84,14 @@ export const logoutSuccess = () => {
 export const checkAuth = () => {
 	return {
 		type: 'CHECK_AUTH',
+	};
+};
+
+export const checkAuthSuccess = (response) => {
+	return {
+		type: 'CHECK_AUTH_SUCCESS',
+		token: response.token,
+		user: response.user,
 	};
 };
 
@@ -145,3 +165,47 @@ export const setId = (id) => {
 		id: id,
 	};
 };
+
+// export const popup = () => {
+// 	return {
+// 		type: 'POPUP',
+// 	};
+// };
+
+// export const navChange = () => {
+// 	return {
+// 		type: 'NAV_CHANGE',
+// 	};
+// };
+
+// export const signinAPI = (data) => {
+// 	console.log('signin start');
+// 	fetch('http://localhost:5000/signin', {
+// 		method: 'post',
+// 		headers: {
+// 			'Content-Type': 'application/json',
+// 		},
+// 		body: JSON.stringify({
+// 			email: data.email,
+// 			password: data.password,
+// 		}),
+// 	})
+// 		.then((res) => res.json())
+// 		.then((response) => {
+// 			console.log('response');
+// 			console.log(response);
+// 			console.log('return');
+// 			if(response.error){
+// 				return signinFail(response.error)
+// 			} else {
+// 				return {
+// 					type:
+// 				}
+// 			}
+// 			return response;
+// 		})
+// 		.catch((error) => {
+// 			console.log('error');
+// 			return error;
+// 		});
+// };

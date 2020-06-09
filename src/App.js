@@ -18,9 +18,20 @@ const App = (props) => {
 	const user = JSON.parse(localStorage.getItem('user'));
 	const path = useSelector((state) => state.path);
 	const autoLogin = () => dispatch(actions.checkAuth());
+	//const result = useSelector((state) => state.result);
+	//console.log(result);
+	// const error = useSelector((state) => state.error);
+	// const message = useSelector((state) => state.message);
+	// const signinClicked = useSelector((state) => state.signinClicked);
 
+	// if (!user) {
+	// 	history.push('/landing');
+	// }
+	//console.log(error, message);
 	useEffect(() => {
 		autoLogin();
+		//console.log(result);
+
 		history.push(path);
 	}, [path]);
 

@@ -5,10 +5,12 @@ import ConfirmDeletePost from '../Screens/ConfirmDeletePost';
 import { Button } from '@material-ui/core';
 import { Favorite as FavoriteIcon, Chat as ChatIcon } from '@material-ui/icons';
 import { useSelector, useDispatch } from 'react-redux';
+import M from 'materialize-css';
 
 const Home = () => {
 	const [comment, setComment] = useState('');
-
+	const message = useSelector((state) => state.signinMessage);
+	//const error = useSelector((state) => state.signinError);
 	const dispatch = useDispatch();
 	const fetchAll = () => dispatch(actions.fetchAll());
 	const like = (id, data) => dispatch(actions.like(id, data));
@@ -21,13 +23,21 @@ const Home = () => {
 	const data = useSelector((state) => state.data);
 	const click = useSelector((state) => state.clicked);
 	const loading = useSelector((state) => state.loading);
-
+	//const message = useSelector((state) => state.message);
+	const signinClicked = useSelector((state) => state.signinClicked);
 	const user = JSON.parse(localStorage.getItem('user'));
 
 	useEffect(() => {
 		fetchAll();
 		console.log(data);
 	}, [click]);
+
+	// useEffect(() => {
+	// 	if (message) {
+	// 		M.toast({ html: message, classes: 'green' });
+	// 		actions.signinStart();
+	// 	}
+	// }, [signinClicked]);
 
 	return (
 		<div>

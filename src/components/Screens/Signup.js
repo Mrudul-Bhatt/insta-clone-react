@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import M from 'materialize-css';
 import LinearProgress from '@material-ui/core/LinearProgress';
@@ -13,24 +13,37 @@ const Signup = () => {
 	const [password, setPassword] = useState('');
 	const history = useHistory();
 	const dispatch = useDispatch();
-	const error = useSelector((state) => state.error);
+
 	const loading = useSelector((state) => state.loading);
+	const signupClicked = useSelector((state) => state.signupClicked);
 	const signup = (name, email, password) =>
 		dispatch(actions.signup(name, email, password));
+	const message = useSelector((state) => state.signupMessage);
+	const error = useSelector((state) => state.signupError);
+
+	// useEffect(() => {
+	// 	console.log(message);
+	// 	if (signupClicked) {
+	// 		history.push('/signin');
+	// 	}
+	// 	console.log(signupClicked);
+	// }, [signupClicked]);
 
 	const addPost = (props) => {
-		if (!emailRegex.test(email)) {
-			M.toast({ html: 'Invalid email', classes: 'red' });
-			return;
-		}
+		// if (!emailRegex.test(email)) {
+		// 	M.toast({ html: 'Invalid email', classes: 'red' });
+		// 	return;
+		// }
 
 		signup(name, email, password);
-		if (error) {
-			M.toast({ html: error, classes: 'red' });
-		} else {
-			M.toast({ html: 'Signup Success', classes: 'green' });
-			history.push('/signin');
-		}
+		// if (error) {
+		// 	M.toast({ html: error, classes: 'red' });
+		// 	return;
+		// }
+		// if (message) {
+		// 	M.toast({ html: message, classes: 'green' });
+		// 	history.push('/signin');
+		// }
 	};
 
 	return (
