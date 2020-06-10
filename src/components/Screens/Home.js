@@ -6,6 +6,7 @@ import { Button } from '@material-ui/core';
 import { Favorite as FavoriteIcon, Chat as ChatIcon } from '@material-ui/icons';
 import { useSelector, useDispatch } from 'react-redux';
 import M from 'materialize-css';
+import { Link } from 'react-router-dom';
 
 const Home = () => {
 	const [comment, setComment] = useState('');
@@ -48,7 +49,15 @@ const Home = () => {
 					return (
 						<div className='card home-card' key={item._id}>
 							<h5>
-								{item.postedBy.name}
+								<Link
+									to={
+										user._id !== item.postedBy._id
+											? '/user/' + item.postedBy._id
+											: '/profile'
+									}
+								>
+									{item.postedBy.name}
+								</Link>
 								<span style={{ float: 'right' }}>
 									{user._id === item.postedBy._id ? (
 										<i

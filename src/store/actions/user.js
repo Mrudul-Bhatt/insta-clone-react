@@ -166,6 +166,13 @@ export const setId = (id) => {
 	};
 };
 
+// export const follow = (response) => {
+// 	return {
+// 		type: 'FOLLOW',
+// 		followers: response.user.followers,
+// 		following: response.user.following,
+// 	};
+// };
 // export const popup = () => {
 // 	return {
 // 		type: 'POPUP',

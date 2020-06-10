@@ -4,6 +4,9 @@ import { useSelector } from 'react-redux';
 const Profile = () => {
 	const [pics, setPics] = useState([]);
 	const user = useSelector((state) => state.user);
+	// const followers = useSelector((state) => state.followers);
+	// const following = useSelector((state) => state.following);
+	const data = JSON.parse(localStorage.getItem('user'));
 	//console.log(state.user);
 
 	useEffect(() => {
@@ -46,9 +49,9 @@ const Profile = () => {
 							width: '108%',
 						}}
 					>
-						<h6>40 posts</h6>
-						<h6>40 followers</h6>
-						<h6>40 following</h6>
+						<h6>{pics && pics.length} posts</h6>
+						<h6>{data.followers.length} followers</h6>
+						<h6>{data.following.length} following</h6>
 					</div>
 				</div>
 			</div>

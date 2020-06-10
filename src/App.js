@@ -10,6 +10,8 @@ import Profile from './components/Screens/Profile';
 import Navbar from './components/Navbar';
 import Createpost from './components/Screens/Createpost';
 import LandingPage from './components/Screens/LandingPage';
+//import { Router } from '@material-ui/icons';
+import User from './components/Screens/User';
 
 const App = (props) => {
 	const history = useHistory();
@@ -59,6 +61,7 @@ const App = (props) => {
 				<Route path='/' exact component={Home} />
 				<Route path='/create' component={Createpost} />
 				<Route path='/profile' component={Profile} />
+				<Route path='/user/:userId' component={User} />
 			</Switch>
 		);
 	}

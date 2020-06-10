@@ -91,7 +91,7 @@ export function* sagaSignup(action) {
 
 const signin = (data) => {
 	//console.log('signin start');
-	return fetch('/signin', {
+	return fetch('http://localhost:5000/signin', {
 		method: 'post',
 		headers: {
 			'Content-Type': 'application/json',
@@ -147,6 +147,7 @@ export function* sagaSignin(action) {
 		yield localStorage.setItem('jwt', response.token);
 		yield localStorage.setItem('user', JSON.stringify(response.user));
 		yield put(actions.signinSuccess(response));
+		//yield put(actions.follow(response));
 	}
 	//yield put(actions.signinClicked());
 }

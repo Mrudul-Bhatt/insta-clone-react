@@ -1,6 +1,5 @@
 export const initialState = {
 	user: null,
-
 	loading: false,
 	token: null,
 	data: [],
@@ -9,7 +8,6 @@ export const initialState = {
 	signupClicked: false,
 	modalId: null,
 	path: '/landing',
-
 	error: null,
 	message: null,
 };
@@ -115,6 +113,12 @@ export const reducer = (state = initialState, action) => {
 				user: action.user,
 				path: '/',
 			};
+		// case 'FOLLOW':
+		// 	return {
+		// 		...state,
+		// 		followers: action.followers,
+		// 		following: action.following,
+		// 	};
 		default:
 			return state;
 	}
