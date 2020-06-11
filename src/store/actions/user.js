@@ -100,6 +100,11 @@ export const fetchAll = () => {
 		type: 'FETCH_ALL',
 	};
 };
+export const fetchSubAll = () => {
+	return {
+		type: 'FETCH_SUB_ALL',
+	};
+};
 
 export const fetchAllStart = () => {
 	return {

@@ -201,6 +201,44 @@ export function* sagaFetchAll(action) {
 	// }
 }
 
+const fetchSubAll = (data) => {
+	return fetch('/allsubpost', {
+		headers: {
+			Authorization: 'Bearer ' + localStorage.getItem('jwt'),
+		},
+	})
+		.then((res) => res.json())
+		.then((response) => ({
+			//console.log('response');
+			//console.log(response);
+			//console.log('return');
+			response,
+		}))
+		.catch((error) => ({
+			//console.log('error');
+			error,
+		}));
+};
+
+export function* sagaFetchSubAll(action) {
+	yield put(actions.fetchAllStart());
+	const { response, error } = yield call(fetchSubAll);
+
+	if (response.error) {
+		yield put(actions.fetchAllFail(response.error));
+	} else if (error) {
+		yield put(actions.fetchAllFail('Server is down, try again later'));
+	} else {
+		yield put(actions.fetchAllSuccess(response.posts));
+	}
+
+	// 	yield put(actions.fetchAllSuccess(value.posts));
+	// 	//yield console.log(value.posts);
+	// } catch (error) {
+	// 	yield put(actions.fetchAllFail('Server is down, try again later'));
+	// }
+}
+
 const like = (data) => {
 	return fetch('/like', {
 		method: 'put',

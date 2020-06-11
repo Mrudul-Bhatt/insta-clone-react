@@ -4,6 +4,7 @@ import * as actions from './store/actions/user';
 import './App.css';
 import { Route, useHistory, Switch, Redirect } from 'react-router-dom';
 import Home from './components/Screens/Home';
+import Explore from './components/Screens/Explore';
 import Signup from './components/Screens/Signup';
 import Signin from './components/Screens/Signin';
 import Profile from './components/Screens/Profile';
@@ -58,10 +59,11 @@ const App = (props) => {
 	if (user) {
 		routes = (
 			<Switch>
-				<Route path='/' exact component={Home} />
+				<Route path='/' exact component={Explore} />
 				<Route path='/create' component={Createpost} />
 				<Route path='/profile' component={Profile} />
 				<Route path='/user/:userId' component={User} />
+				<Route path='/home' component={Home} />
 			</Switch>
 		);
 	}

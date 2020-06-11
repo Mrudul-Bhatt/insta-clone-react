@@ -1,10 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, NavLink } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../store/actions/user';
 const Navbar = () => {
 	const dispatch = useDispatch();
+	//const [SUA, setSUA] = useState(null);
 	const logout = () => dispatch(actions.logout());
 	console.log('executed navbar');
 	//const user = localStorage.getItem('user');
@@ -38,7 +39,7 @@ const Navbar = () => {
 						{user ? (
 							<div>
 								<li>
-									<Link to='/'>Home</Link>
+									<Link to='/home'>Home</Link>
 								</li>
 								<li>
 									<Link to='/create'>Add Post</Link>

@@ -13,7 +13,7 @@ const Home = () => {
 	const message = useSelector((state) => state.signinMessage);
 	//const error = useSelector((state) => state.signinError);
 	const dispatch = useDispatch();
-	const fetchSubAll = () => dispatch(actions.fetchSubAll());
+	const fetchAll = () => dispatch(actions.fetchAll());
 	const like = (id, data) => dispatch(actions.like(id, data));
 	const unlike = (id, data) => dispatch(actions.unlike(id, data));
 	const postComment = (id, data, comment) =>
@@ -29,7 +29,7 @@ const Home = () => {
 	const user = JSON.parse(localStorage.getItem('user'));
 
 	useEffect(() => {
-		fetchSubAll();
+		fetchAll();
 		console.log(data);
 	}, [click]);
 

@@ -101,7 +101,7 @@ const User = () => {
 				<div>
 					<img
 						style={{ width: '160px', height: '160px', borderRadius: '80px' }}
-						src='https://images.unsplash.com/photo-1581362232694-329367e2b2d9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80'
+						src={userProfile ? userProfile.user.imageUrl : null}
 						alt='person'
 					/>
 				</div>

@@ -10,7 +10,7 @@ import {
 	sagaUnlike,
 	sagaComment,
 	sagaDeletePost,
-	sagaPopup,
+	sagaFetchSubAll,
 } from './user';
 
 //ON EVERY CALL TO 'AUTH_CHECK_TIMEOUT' , checkTimeoutSage will get executed
@@ -29,6 +29,6 @@ export function* watchAuth() {
 		takeEvery('UNLIKE', sagaUnlike),
 		takeEvery('COMMENT', sagaComment),
 		takeEvery('DELETE_POST', sagaDeletePost),
-		//takeEvery('POPUP', sagaPopup),
+		takeEvery('FETCH_SUB_ALL', sagaFetchSubAll),
 	]);
 }
