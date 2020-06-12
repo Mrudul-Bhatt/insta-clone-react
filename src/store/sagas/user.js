@@ -2,8 +2,6 @@ import { put, call } from 'redux-saga/effects';
 import * as actions from '../actions/user';
 import { emailRegex } from '../../regex';
 import M from 'materialize-css';
-import { useHistory } from 'react-router';
-//const history = useHistory();
 
 export function* sagaLogout(action) {
 	yield call([localStorage, 'removeItem'], 'jwt');
@@ -26,9 +24,6 @@ const signup = (data) => {
 	})
 		.then((res) => res.json())
 		.then((response) => ({
-			//console.log('response');
-			//console.log(response);
-			//console.log('return');
 			response,
 		}))
 		.catch((error) => ({
@@ -71,23 +66,7 @@ export function* sagaSignup(action) {
 		yield put(actions.signupSuccess(response));
 		yield put(actions.signupClicked());
 	}
-
-	//yield put(actions.signupClicked());
-	//yield put(actions.popup());
 }
-
-// export function* sagaPopup(action) {
-// 	if (error && e !== error) {
-// 		M.toast({ html: error, classes: 'red' });
-// 		actions.signupStart();
-// 	}
-// 	if (message) {
-// 		console.log(message);
-// 		M.toast({ html: message, classes: 'green' });
-// 		actions.signupStart();
-// 		history.push('/signin');
-// 	}
-// }
 
 const signin = (data) => {
 	//console.log('signin start');
@@ -103,9 +82,6 @@ const signin = (data) => {
 	})
 		.then((res) => res.json())
 		.then((response) => ({
-			//console.log('response');
-			//console.log(response);
-			//console.log('return');
 			response,
 		}))
 		.catch((error) => ({
@@ -171,9 +147,6 @@ const fetchAll = (data) => {
 	})
 		.then((res) => res.json())
 		.then((response) => ({
-			//console.log('response');
-			//console.log(response);
-			//console.log('return');
 			response,
 		}))
 		.catch((error) => ({
@@ -193,12 +166,6 @@ export function* sagaFetchAll(action) {
 	} else {
 		yield put(actions.fetchAllSuccess(response.posts));
 	}
-
-	// 	yield put(actions.fetchAllSuccess(value.posts));
-	// 	//yield console.log(value.posts);
-	// } catch (error) {
-	// 	yield put(actions.fetchAllFail('Server is down, try again later'));
-	// }
 }
 
 const fetchSubAll = (data) => {
@@ -209,9 +176,6 @@ const fetchSubAll = (data) => {
 	})
 		.then((res) => res.json())
 		.then((response) => ({
-			//console.log('response');
-			//console.log(response);
-			//console.log('return');
 			response,
 		}))
 		.catch((error) => ({
@@ -231,12 +195,6 @@ export function* sagaFetchSubAll(action) {
 	} else {
 		yield put(actions.fetchAllSuccess(response.posts));
 	}
-
-	// 	yield put(actions.fetchAllSuccess(value.posts));
-	// 	//yield console.log(value.posts);
-	// } catch (error) {
-	// 	yield put(actions.fetchAllFail('Server is down, try again later'));
-	// }
 }
 
 const like = (data) => {
@@ -250,9 +208,6 @@ const like = (data) => {
 	})
 		.then((res) => res.json())
 		.then((response) => ({
-			//console.log('response');
-			//console.log(response);
-			//console.log('return');
 			response,
 		}))
 		.catch((error) => ({
@@ -300,9 +255,6 @@ const unlike = (data) => {
 	})
 		.then((res) => res.json())
 		.then((response) => ({
-			//console.log('response');
-			//console.log(response);
-			//console.log('return');
 			response,
 		}))
 		.catch((error) => ({
@@ -337,29 +289,6 @@ export function* sagaUnlike(action) {
 		yield put(actions.fetchAllSuccess(newData));
 	}
 
-	// try {
-	// 	const response = yield fetch('/unlike', {
-	// 		method: 'put',
-	// 		headers: {
-	// 			'Content-Type': 'application/json',
-	// 			Authorization: 'Bearer ' + localStorage.getItem('jwt'),
-	// 		},
-	// 		body: JSON.stringify(unlikeData),
-	// 	});
-	// 	const value = yield response.json();
-
-	// 	const newData = yield action.data.map((item) => {
-	// 		if (item._id === value._id) {
-	// 			return value;
-	// 		} else {
-	// 			return item;
-	// 		}
-	// 	});
-	// 	yield put(actions.fetchAllSuccess(newData));
-	// 	yield console.log('unlike saga finished');
-	// } catch (error) {
-	// 	yield put(actions.fetchAllFail(error));
-	// }
 	yield put(actions.clickedChange());
 }
 
@@ -374,9 +303,6 @@ const comment = (data) => {
 	})
 		.then((res) => res.json())
 		.then((response) => ({
-			//console.log('response');
-			//console.log(response);
-			//console.log('return');
 			response,
 		}))
 		.catch((error) => ({
@@ -421,9 +347,6 @@ const deletePost = (data) => {
 	})
 		.then((res) => res.json())
 		.then((response) => ({
-			//console.log('response');
-			//console.log(response);
-			//console.log('return');
 			response,
 		}))
 		.catch((error) => ({
@@ -454,5 +377,5 @@ export function* sagaDeletePost(action) {
 	}
 
 	yield put(actions.clickedChange());
-	yield put(actions.setId(null));
+	//yield put(actions.setId(null));
 }

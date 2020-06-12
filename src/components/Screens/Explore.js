@@ -1,50 +1,72 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { LinearProgress } from '@material-ui/core';
+import React, { useState, useEffect, useRef } from 'react';
 import * as actions from '../../store/actions/user';
-import ConfirmDeletePost from './ConfirmDeletePost';
-import { Button } from '@material-ui/core';
+import { Button, Avatar, Tooltip, LinearProgress } from '@material-ui/core';
 import { Favorite as FavoriteIcon, Chat as ChatIcon } from '@material-ui/icons';
 import { useSelector, useDispatch } from 'react-redux';
 import M from 'materialize-css';
 import { Link } from 'react-router-dom';
 
 const Home = () => {
+	const deleteModal = useRef(null);
+	const [id, setId] = useState(null);
 	const [comment, setComment] = useState('');
-	const message = useSelector((state) => state.signinMessage);
-	//const error = useSelector((state) => state.signinError);
 	const dispatch = useDispatch();
 	const fetchAll = () => dispatch(actions.fetchAll());
 	const like = (id, data) => dispatch(actions.like(id, data));
 	const unlike = (id, data) => dispatch(actions.unlike(id, data));
 	const postComment = (id, data, comment) =>
 		dispatch(actions.comment(id, data, comment));
-
-	const setId = (id) => dispatch(actions.setId(id));
+	const deletePost = (id, data) => dispatch(actions.deletePost(id, data));
 	const clickChange = () => dispatch(actions.clickedChange());
 	const data = useSelector((state) => state.data);
-	const click = useSelector((state) => state.clicked);
 	const loading = useSelector((state) => state.loading);
-	//const message = useSelector((state) => state.message);
-	const signinClicked = useSelector((state) => state.signinClicked);
 	const user = JSON.parse(localStorage.getItem('user'));
 
 	useEffect(() => {
 		fetchAll();
-		console.log(data);
-	}, [click]);
+		//console.log(data);
+	}, []);
 
-	// useEffect(() => {
-	// 	if (message) {
-	// 		M.toast({ html: message, classes: 'green' });
-	// 		actions.signinStart();
-	// 	}
-	// }, [signinClicked]);
+	useEffect(() => {
+		M.Modal.init(deleteModal.current);
+	}, []);
 
 	return (
 		<div>
 			{loading ? <LinearProgress /> : null}
 			<div className='home'>
-				<ConfirmDeletePost />
+				<div
+					id='modal2'
+					className='modal'
+					ref={deleteModal}
+					style={{ color: 'black' }}
+				>
+					<div className='modal-content'>
+						<h4>Do you want to delete this post ?</h4>
+					</div>
+					<div className='modal-footer'>
+						<button
+							style={{ color: 'red' }}
+							className='modal-close waves-effect waves-green btn-flat'
+							onClick={() => {
+								setId(null);
+								M.Modal.getInstance(deleteModal.current).close();
+							}}
+						>
+							Cancel
+						</button>
+						<button
+							style={{ color: 'blue' }}
+							className='modal-close waves-effect waves-green btn-flat'
+							onClick={() => {
+								deletePost(id, data);
+								M.Modal.getInstance(deleteModal.current).close();
+							}}
+						>
+							Delete
+						</button>
+					</div>
+				</div>
 				{data.map((item) => {
 					return (
 						<div className='card home-card' key={item._id}>
@@ -56,18 +78,36 @@ const Home = () => {
 											: '/profile'
 									}
 								>
-									{item.postedBy.name}
+									<div>
+										<Avatar
+											alt='Cindy Baker'
+											src={item.postedBy.imageUrl}
+											style={{ display: 'inline-block', margin: '5px' }}
+										/>
+
+										<h5
+											style={{
+												display: 'inline-block',
+												margin: '10px',
+											}}
+										>
+											{item.postedBy.name}
+										</h5>
+									</div>
 								</Link>
 								<span style={{ float: 'right' }}>
 									{user._id === item.postedBy._id ? (
-										<i
-											className='material-icons'
-											onClick={() => {
-												setId(item._id);
-											}}
-										>
-											delete
-										</i>
+										<Tooltip title='Delete'>
+											<i
+												data-target='modal2'
+												className='material-icons modal-trigger'
+												onClick={() => {
+													setId(item._id);
+												}}
+											>
+												delete
+											</i>
+										</Tooltip>
 									) : null}
 								</span>
 							</h5>
@@ -76,25 +116,29 @@ const Home = () => {
 							</div>
 							<div className='card-content'>
 								{item.likes.includes(user._id) ? (
-									<i
-										className='material-icons'
-										style={{ color: 'red' }}
-										onClick={() => {
-											unlike(item._id, data);
-										}}
-									>
-										thumb_down
-									</i>
+									<Tooltip title='Dislike'>
+										<i
+											className='material-icons'
+											style={{ color: 'red' }}
+											onClick={() => {
+												unlike(item._id, data);
+											}}
+										>
+											thumb_down
+										</i>
+									</Tooltip>
 								) : (
-									<i
-										className='material-icons'
-										style={{ color: 'blue' }}
-										onClick={() => {
-											like(item._id, data);
-										}}
-									>
-										thumb_up
-									</i>
+									<Tooltip title='Like'>
+										<i
+											className='material-icons'
+											style={{ color: 'blue' }}
+											onClick={() => {
+												like(item._id, data);
+											}}
+										>
+											thumb_up
+										</i>
+									</Tooltip>
 								)}
 
 								<h6>
@@ -129,7 +173,7 @@ const Home = () => {
 										postComment(item._id, data, comment);
 										clickChange();
 										setComment('');
-										console.log('add comment');
+										//console.log('add comment');
 									}}
 								>
 									Add

@@ -19,33 +19,27 @@ export const reducer = (state = initialState, action) => {
 		case 'SIGNUP_START':
 			return {
 				...state,
-				//signupMessage: null,
-				//signupError: null,
 				signupClicked: false,
 				loading: true,
 			};
 		case 'SIGNUP_SUCCESS':
 			return {
 				...state,
-				//signupMessage: action.message,
 				loading: false,
 			};
 		case 'SIGNUP_FAIL':
 			return {
 				...state,
-				//signupError: action.error,
 				loading: false,
 			};
 		case 'SIGNIN_START':
 			return {
 				...state,
-
 				loading: true,
 			};
 		case 'SIGNIN_SUCCESS':
 			return {
 				...state,
-				//signinMessage: action.message,
 				token: action.token,
 				user: action.user,
 				loading: false,
@@ -54,7 +48,6 @@ export const reducer = (state = initialState, action) => {
 		case 'SIGNIN_FAIL':
 			return {
 				...state,
-				//signinError: action.error,
 				loading: false,
 			};
 		case 'LOGOUT_SUCCESS':
@@ -113,12 +106,6 @@ export const reducer = (state = initialState, action) => {
 				user: action.user,
 				path: '/',
 			};
-		// case 'FOLLOW':
-		// 	return {
-		// 		...state,
-		// 		followers: action.followers,
-		// 		following: action.following,
-		// 	};
 		default:
 			return state;
 	}

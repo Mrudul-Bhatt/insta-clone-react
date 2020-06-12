@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Button } from '@material-ui/core';
+import { Button, LinearProgress } from '@material-ui/core';
 import { useHistory } from 'react-router';
 import M from 'materialize-css';
 
@@ -10,10 +10,8 @@ const Profile = () => {
 	const user = useSelector((state) => state.user);
 	const [image, setImage] = useState('');
 	const [url, setUrl] = useState('');
-	// const followers = useSelector((state) => state.followers);
-	// const following = useSelector((state) => state.following);
+	const [loader, setLoader] = useState(false);
 	const data = JSON.parse(localStorage.getItem('user'));
-	//console.log(state.user);
 
 	useEffect(() => {
 		fetch('/mypost', {
@@ -31,7 +29,8 @@ const Profile = () => {
 
 	useEffect(() => {
 		if (url) {
-			console.log(url);
+			setLoader(true);
+			//console.log(url);
 			fetch('/profileimg', {
 				method: 'put',
 				headers: {
@@ -45,7 +44,7 @@ const Profile = () => {
 			})
 				.then((res) => res.json())
 				.then((response) => {
-					console.log(response);
+					//console.log(response);
 					if (response.error) {
 						M.toast({ html: response.error, classes: 'red' });
 					} else {
@@ -53,17 +52,17 @@ const Profile = () => {
 						M.toast({ html: 'Image updated successfully', classes: 'green' });
 						history.push('/');
 					}
-					//setLoader(false);
+					setLoader(false);
 				})
 				.catch((error) => {
 					console.log(error);
-					//setLoader(false);
+					setLoader(false);
 				});
 		}
 	}, [url]);
 
 	const addImage = () => {
-		//setLoader(true);
+		setLoader(true);
 		const data = new FormData();
 		data.append('file', image);
 		data.append('upload_preset', 'insta-clone');
@@ -74,78 +73,81 @@ const Profile = () => {
 		})
 			.then((res) => res.json())
 			.then((data) => {
-				console.log(data.url);
+				//console.log(data.url);
 				setUrl(data.url);
 			})
 			.catch((error) => console.log(error));
 	};
 
 	return (
-		<div style={{ maxWidth: '550px', margin: '0px auto' }}>
-			<div
-				style={{
-					display: 'flex',
-					justifyContent: 'space-around',
-					margin: '18px 0px',
-					borderBottom: '1px solid grey',
-				}}
-			>
-				<div>
-					<img
-						style={{ width: '160px', height: '160px', borderRadius: '80px' }}
-						src={data ? data.imageUrl : null}
-						alt='person'
-					/>
-				</div>
-				<div>
-					<h4>{user ? user.name : null}</h4>
-					<h5>{user ? user.email : null}</h5>
-					<div
-						style={{
-							display: 'flex',
-							justifyContent: 'space-between',
-							width: '108%',
-						}}
-					>
-						<h6>{pics ? pics.length : null} posts</h6>
-						<h6>{data ? data.followers.length : null} followers</h6>
-						<h6>{data ? data.following.length : null} following</h6>
+		<div>
+			{loader ? <LinearProgress /> : null}
+			<div style={{ maxWidth: '550px', margin: '0px auto' }}>
+				<div
+					style={{
+						display: 'flex',
+						justifyContent: 'space-around',
+						margin: '18px 0px',
+						borderBottom: '1px solid grey',
+					}}
+				>
+					<div>
+						<img
+							style={{ width: '160px', height: '160px', borderRadius: '80px' }}
+							src={data ? data.imageUrl : null}
+							alt='person'
+						/>
 					</div>
-					<div className='file-field input-field'>
-						<div className='btn waves-effect waves-light blue darken-1'>
-							<span>Avatar</span>
-							<input
-								type='file'
-								onChange={(e) => setImage(e.target.files[0])}
-							/>
+					<div>
+						<h4>{user ? user.name : null}</h4>
+						<h5>{user ? user.email : null}</h5>
+						<div
+							style={{
+								display: 'flex',
+								justifyContent: 'space-between',
+								width: '108%',
+							}}
+						>
+							<h6>{pics ? pics.length : null} posts</h6>
+							<h6>{data ? data.followers.length : null} followers</h6>
+							<h6>{data ? data.following.length : null} following</h6>
 						</div>
-						<div className='file-path-wrapper'>
-							<input className='file-path validate' type='text' />
-						</div>
-					</div>
-					<Button
-						/*variant='outlined'*/
-						size='large'
-						color='primary'
-						onClick={() => addImage()}
-					>
-						Upload Photo
-					</Button>
-				</div>
-			</div>
-			<div className='gallery'>
-				{pics
-					? pics.map((item) => {
-							return (
-								<img
-									className='item'
-									src={item.imageUrl}
-									alt='pics'
-									key={item._id}
+						<div className='file-field input-field'>
+							<div className='btn waves-effect waves-light blue darken-1'>
+								<span>Avatar</span>
+								<input
+									type='file'
+									onChange={(e) => setImage(e.target.files[0])}
 								/>
-							);
-					  })
-					: null}
+							</div>
+							<div className='file-path-wrapper'>
+								<input className='file-path validate' type='text' />
+							</div>
+						</div>
+						<Button
+							/*variant='outlined'*/
+							size='large'
+							color='primary'
+							onClick={() => addImage()}
+						>
+							Upload Photo
+						</Button>
+					</div>
+				</div>
+				<div className='gallery'>
+					{pics
+						? pics.map((item) => {
+								return (
+									<img
+										className='item'
+										src={item.imageUrl}
+										alt='pics'
+										key={item._id}
+									/>
+								);
+						  })
+						: null}
+				</div>
 			</div>
 		</div>
 	);

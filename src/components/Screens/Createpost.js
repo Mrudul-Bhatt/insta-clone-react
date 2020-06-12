@@ -9,7 +9,6 @@ const Createpost = () => {
 	const [image, setImage] = useState('');
 	const [url, setUrl] = useState('');
 	const [loader, setLoader] = useState(false);
-
 	const history = useHistory();
 
 	useEffect(() => {
@@ -28,7 +27,7 @@ const Createpost = () => {
 			})
 				.then((res) => res.json())
 				.then((data) => {
-					console.log(data);
+					//console.log(data);
 					if (data.error) {
 						M.toast({ html: data.error, classes: 'red' });
 					} else {

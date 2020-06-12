@@ -1,9 +1,8 @@
-import React, { useCallback, useEffect, useState, useRef } from 'react';
-import { Link, useHistory, NavLink } from 'react-router-dom';
-import Button from '@material-ui/core/Button';
+import React, { useEffect, useState, useRef } from 'react';
+import { Link, useHistory } from 'react-router-dom';
+import { Button, Tooltip } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../store/actions/user';
-import SearchIcon from '@material-ui/icons/Search';
 import M from 'materialize-css';
 
 const Navbar = () => {
@@ -11,18 +10,9 @@ const Navbar = () => {
 	const [search, setSearch] = useState('');
 	const [users, setUsers] = useState([]);
 	const dispatch = useDispatch();
-	//const [SUA, setSUA] = useState(null);
 	const logout = () => dispatch(actions.logout());
-	console.log('executed navbar');
-	//const user = localStorage.getItem('user');
 	const user = useSelector((state) => state.user);
-	//const navChange = useSelector((state) => state.navChange);
-	//const token = useSelector((state) => state.token !== null);
-	//const navChangefn = () => dispatch(actions.navChange());
-
-	// useEffect(() => {
-	// 	console.log(navChange);
-	// }, [navChange]);
+	const setId = (id) => dispatch(actions.setId(id));
 	const history = useHistory();
 
 	useEffect(() => {
@@ -43,7 +33,7 @@ const Navbar = () => {
 		})
 			.then((res) => res.json())
 			.then((value) => {
-				console.log(value);
+				//console.log(value);
 				setUsers(value.result);
 			})
 			.catch((err) => {
@@ -78,6 +68,7 @@ const Navbar = () => {
 											onClick={() => {
 												M.Modal.getInstance(searchModal.current).close();
 												setSearch('');
+												setId(item._id);
 											}}
 										>
 											<li className='collection-item'>{item.email}</li>
@@ -114,13 +105,15 @@ const Navbar = () => {
 						{user ? (
 							<div>
 								<li>
-									<i
-										className='large material-icons modal-trigger'
-										data-target='modal1'
-										style={{ color: 'blue', fontSize: '30px' }}
-									>
-										search
-									</i>
+									<Tooltip title='Search User'>
+										<i
+											className='large material-icons modal-trigger'
+											data-target='modal1'
+											style={{ color: 'blue', fontSize: '30px' }}
+										>
+											search
+										</i>
+									</Tooltip>
 								</li>
 								<li>
 									<Link to='/home'>Home</Link>
@@ -135,8 +128,9 @@ const Navbar = () => {
 									<Button
 										color='primary'
 										onClick={() => {
-											console.log('executed logout');
+											//console.log('executed logout');
 											logout();
+											setUsers([]);
 											//navChangefn();
 											history.push('/landing');
 										}}

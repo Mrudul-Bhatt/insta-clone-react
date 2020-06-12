@@ -1,5 +1,3 @@
-import { retry } from 'redux-saga/effects';
-
 export const signupSuccess = (response) => {
 	return {
 		type: 'SIGNUP_SUCCESS',
@@ -170,54 +168,3 @@ export const setId = (id) => {
 		id: id,
 	};
 };
-
-// export const follow = (response) => {
-// 	return {
-// 		type: 'FOLLOW',
-// 		followers: response.user.followers,
-// 		following: response.user.following,
-// 	};
-// };
-// export const popup = () => {
-// 	return {
-// 		type: 'POPUP',
-// 	};
-// };
-
-// export const navChange = () => {
-// 	return {
-// 		type: 'NAV_CHANGE',
-// 	};
-// };
-
-// export const signinAPI = (data) => {
-// 	console.log('signin start');
-// 	fetch('http://localhost:5000/signin', {
-// 		method: 'post',
-// 		headers: {
-// 			'Content-Type': 'application/json',
-// 		},
-// 		body: JSON.stringify({
-// 			email: data.email,
-// 			password: data.password,
-// 		}),
-// 	})
-// 		.then((res) => res.json())
-// 		.then((response) => {
-// 			console.log('response');
-// 			console.log(response);
-// 			console.log('return');
-// 			if(response.error){
-// 				return signinFail(response.error)
-// 			} else {
-// 				return {
-// 					type:
-// 				}
-// 			}
-// 			return response;
-// 		})
-// 		.catch((error) => {
-// 			console.log('error');
-// 			return error;
-// 		});
-// };

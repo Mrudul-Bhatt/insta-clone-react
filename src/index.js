@@ -1,12 +1,3 @@
-// import 'bootstrap/dist/css/bootstrap.min.css';
-// import $ from 'jquery';
-// import 'popper.js';
-// import 'bootstrap/dist/js/bootstrap';
-// //import 'bootstrap/js';
-// import 'bootstrap';
-// import 'jquery';
-//import 'bootstrap/dist/css/bootstrap.css';
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
